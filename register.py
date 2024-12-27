@@ -40,6 +40,19 @@ def webhook():
     return "!", 200
 if __name__ == "__main__":
     app.run(host=WEBAPP_HOST, port=5000)
+@app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
+def telegram_webhook():
+    from flask import request
+    import telebot
+
+    json_data = request.get_json()
+    bot = telebot.TeleBot(API_KEY)
+
+    if json_data:
+        update = telebot.types.Update.de_json(json_data)
+        bot.process_new_updates([update])
+
+    return "OK", 200
 
 
 
