@@ -12,7 +12,7 @@ from flask import Flask, request
 # API_KEY = "7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII"
 # ADMIN_CHAT_ID = "793034140"
 API_KEY = os.getenv("API_KEY")
-ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id"")
+# ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id"")
 bot = telebot.TeleBot(API_KEY)
 
 
