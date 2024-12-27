@@ -3,15 +3,15 @@ from flask import Flask, request
 # from telegram import Bot, Update
 # from telebot import types
 # from telegram.ext import CommandHandler, Updater, CallbackContext, Application
-# import os
+import os
 # # from telegram.ext import Dispatcher
 # from telebot.types import ForceReply
 # import telegram
 # from telebot import types
 
-# API_KEY = "7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII"
+API_KEY = "7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII"
 # ADMIN_CHAT_ID = "793034140"
-API_KEY = os.getenv("API_KEY")
+# API_KEY = os.getenv("API_KEY")
 # ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id"")
 bot = telebot.TeleBot(API_KEY)
 
