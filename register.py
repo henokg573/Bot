@@ -1,119 +1,144 @@
+# from flask import Flask, request
+# import telebot
+# from telegram import Bot, Update
+# from telebot import types
+# from telegram.ext import CommandHandler, Updater, CallbackContext, Application
+# import os
+# # from telegram.ext import Dispatcher
+# from telebot.types import ForceReply
+# import telegram
+# from telebot import types
+
+# API_KEY = "7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII"
+# ADMIN_CHAT_ID = "793034140"
+# API_KEY = os.getenv("API_KEY", "default_api_key")
+# ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id", "default_admin_chat_id")
+# bot = telebot.TeleBot(API_KEY)
+
+
+
+
+# app = Flask(__name__)
+
+
+
+
+import email
+from flask import Flask, request
 import telebot
-import os
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from telegram import Bot, Update
 from telebot import types
-from dotenv import load_dotenv
-# Load environment variables from .env file
-load_dotenv()
+from telegram.ext import CommandHandler, Updater, CallbackContext, Application
+import os
+# from telegram.ext import Dispatcher
+from telebot.types import ForceReply
+import telegram
+from telebot import types
+# from keep_alive import keep_alive
+# keep_alive()
 
-# Access the API key from the environment
-API_KEY = os.getenv("API_KEY")
-ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id")
 
+
+# Replace with your API key
+API_KEY = '7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII'
 bot = telebot.TeleBot(API_KEY)
 
+# Admin's chat ID (replace with the actual admin chat ID)
+ADMIN_CHAT_ID = '793034140'  # You should use your actual chat ID here
 
-# Load environment variables from .env file
-load_dotenv()
+# bot = telebot.TeleBot(token=os.environ.get("API_KEY"))
 
-# Access the API key from the environment
-API_KEY = os.getenv("API_KEY")
-ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id")
-# Temporary storage for user data
-user_data = {}
-pending_verifications = {}
-# Log the chat ID of all users
-# @bot.message_handler(func=lambda message: True)
-# def log_chat_id(message):
-#     print(f"Chat ID: {message.chat.id}")
-    
-
-
-
-# Start command
+app = Flask(__name__)
 @bot.message_handler(commands=['start'])
-def start_registration(message):
-    print(f"Chat ID: {message.chat.id}")
+def send_welcome(message):
+    print(f"Received /start from {message.chat.id}")  # Debugging
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    btn1 = types.KeyboardButton('About Us')
+    btn2 = types.KeyboardButton('Our Services')
+    btn3 = types.KeyboardButton('Continue to  Register')
+    btn4 = types.KeyboardButton('Feedback')
+    markup.add(btn1, btn2, btn3, btn4)
+    # markup.add(btn12, btn13, btn14, btn15)
+
+
     bot.reply_to(
         message,
         f"""👋 Hi {message.chat.first_name}! 
-        Welcome to EasyGate! Your Gateway to Global Opportunities.
+        👋 Welcome to EasyGate!, 
+        welcome to Your 
+                        \t\t\t\t\tGateway to Global Opportunities.
+                        \t\t\t\t\tSimplifying Your Path to Success.
+                        \t\t\t\t\tFrom Dreams to Destinations.
+                        \t\t\t\t\tOpen Doors, Easy Journeys.
+We’re thrilled to have you here! 🎉
 
-We specialize in:
- Scholarship and admissions
- Passport and visa applications
- Career and e-commerce services
- Travel consultancy
- Online courses and tests
+At EasyGate, we specialize in making your goals more accessible, whether it’s education, travel, or career growth. Here's what we can help you with:
+             Scholarship and admission opportunities
+             Passport and visa applications
+             International career and e-commerce services
+             Embassy appointments and travel consultancy
+             Online courses and proficiency tests
 
-Select a service to proceed:""",
-        reply_markup=main_menu_markup()
+Let us guide you every step of the way! Simply explore the options below and get started on your journey with us.
+
+Feel free to reach out if you have any questions—we’re here to make things easy for you!
+        \n\nwe are currently on registration period and you can continue to register or see our services. 
+        if you need help, please typle /help
+        if you need to contact us, use this commant /contact
+        if you need guide how to use our services, we have prepared tour guide her /guide
+        """,
+        reply_markup=markup,    
     )
 
-# Handle main menu options
-@bot.message_handler(func=lambda msg: msg.text in ["Feedback", "About us", "Our services", "Continue to register" , "Already Registered?"])
-def handle_menu_choice(message):
-    if message.text == "Feedback":
-        feedback_menu(message)
-        # bot.reply_to(message, "Please provide your feedback. It will be sent to the admin.", reply_markup=main_menu_markup())
-    elif message.text == "About us":
-        about_us(message)
-    elif message.text == "Our services":
-        our_services(message)
-    elif message.text == "Continue to register":
-        registration_menu(message)
-    elif message.text == "Already Registered?":
-        Already_registered(message)
+    
+    # Guide Command
+@bot.message_handler(commands=['guide'])
+@bot.message_handler(func=lambda message: message.text == "Guide")
+def send_guide(message):
+    bot.reply_to(
+        message,
+        """ Guide to EasyGate registration bot:
+1️⃣ See our services, get to know our bot, contact us and learn more.
+2️⃣ Follow instructions to register.
+3️⃣ Use 'Payment' to handle transactions securely.
 
-# Command handler for /help
+Explore and simplify your journey with EasyGate! 🌟""", reply_markup = main_menu_markup()
+    )
+
+ # Help Command
 @bot.message_handler(commands=['help'])
-def handle_help(message):
-    bot.reply_to(message, """🆘 Help Menu:
-    - Type '/start' to restart the bot
-    - Type '/service' to view available services
-    - Type '/contact' to contact us""")
-
-# Command handler for /service
-@bot.message_handler(commands=['service'])
-def handle_service(message):
-    bot.reply_to(message, """ Our Services:
-    1️⃣ Embassy Interview Assistance
-    2️⃣ Document Review
-    3️⃣ Travel Advice
-    4️⃣ Visa Application Assistance
-    5️⃣ Scholarship Opportunities
-    6️⃣ English Proficiency Test Preparation
-    7️⃣ Passport Services
-    8️⃣ E-Visa Applications
-    9️⃣ International Payments
-    🔟 International Career Opportunities
-    1️⃣1️⃣ Recommend Educational Travel Consultancies
-    1️⃣2️⃣ Assistance with Any Embassy Interview Practice
-    1️⃣3️⃣ Other Services""")
-
-# Command handler for /contact
-@bot.message_handler(commands=['contact'])
-def handle_contact(message):
-    bot.reply_to(message, """📞 Contact Us:
-    - Email: contact.easygate@gmail.com
-    - Phone: +251964255107
-    - Telegram: @easygate2""")
-# Default handler for unrecognized inputs
-
-# Feedback menu
-def feedback_menu(message):
-    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    markup.add(
-        KeyboardButton('Feedback using Google Form'),
-        KeyboardButton('Feedback using Telegram Bot'),
-        KeyboardButton('Main Menu')
+@bot.message_handler(func=lambda message: message.text == "Help")
+def send_guide(message):
+    bot.reply_to(
+        message,
+        """ to use this service, please hit /start
+        for guide, use this /guide
+        to  contact us, use this /contact
+""", reply_markup = main_menu_markup()
     )
-    bot.reply_to(message, "How would you like to provide feedback?", reply_markup=markup)
+    # Contact Command
+@bot.message_handler(commands=['contact'])
+@bot.message_handler(func=lambda message: message.text == "Contact")
+def send_guide(message):
+    bot.reply_to(
+        message,
+        """Contact us via:
+        @easygate2
+        0964255107
+        contact.easygate@gmail.com
+        for help, use this /help
+        to start using this service, use this /start""",reply_markup = main_menu_markup())
 
-# About Us information
-def about_us(message):
-    bot.reply_to(message, """
-Welcome to EasyGate! 
+
+@bot.message_handler(func=lambda message: True)
+def handle_options(message):
+    print(f"Message received: {message.text}")  # Debugging
+    service_selected = message.text  # Define service_selected
+    if message.text == 'About Us':
+        bot.reply_to(
+        message,
+        """Welcome to EasyGate! 
 
     We are a team of young Ethiopians, currently studying and working across the globe. Our mission is to simplify the process of accessing international education and career opportunities by reducing costs and eliminating the need for expensive intermediaries. 
 
@@ -127,12 +152,11 @@ Welcome to EasyGate!
      Email: contact.easygate@gmail.com
 
     Feel free to contact us via any of the platforms above for more information or to get started! 
-    """, reply_markup=main_menu_markup())
-
-# Our Services information
-def our_services(message):
-    bot.reply_to(message, """
- Our Services:
+    """, reply_markup = main_menu_markup())
+    elif message.text == "Our Services":
+        bot.reply_to(
+        message,
+        """ Our Services:
     1️⃣ Embassy Interview Assistance
     2️⃣ Document Review
     3️⃣ Travel Advice
@@ -147,201 +171,155 @@ def our_services(message):
     1️⃣2️⃣ Assistance with Any Embassy Interview Practice
     1️⃣3️⃣ Other Services
 
-📞 Contact us to learn more.
-    """, reply_markup=main_menu_markup())
+📞 Contact us to learn more.""", reply_markup = main_menu_markup())
+    elif message.text == "Continue to  Register":
+        bot.reply_to(
+        message,
+            """To register, we offer three ways, you can register through
+            our google form link, you can contact us and register, and you can register through our bot.
+            please choose one of the options below to continue.""", reply_markup = register_markup())
+    elif message.text == "Feedback":
+        bot.reply_to(
+        message,
+            """We value your feedback!. you can directly send your feedbacks to Admin
+            or you can send your feedbacks using our Google form link: please choose what suits you well"""
+            , reply_markup = feedback_markup())
+    elif message.text == "Already Registered?":
+        bot.reply_to(
+        message,
+            """If you have already registered, please continue to the payment method""", reply_markup = payment_markup())
+    elif message.text == "Google Form":
+        bot.reply_to(
+        message,
+            """Please fill out the Google form to register: [Google Form](https://forms.gle/7oZ6z5f4v5ZnUv8dA)""", reply_markup = register_markup())
+    elif message.text == "Directly on Telegram":
+        bot.reply_to(
+            message,
+                """please use this username
+                @easygate2 or 0964255107 to register""", reply_markup = register_markup())
+    elif message.text == "Bot Registration":
+        start_registration(message)
+    elif message.text == "Google Form feedback":
+        bot.reply_to(
+            message,
+                """Please fill out the Google form to provide feedback: [Google Form](https://forms.gle/7oZ6z5f4v5ZnUv8dA)""", reply_markup = feedback_markup())
+    elif message.text == "Directly to Admin":
+        bot.reply_to(
+            message,
+                """Please send your feedback directly to the admin.""", reply_markup = feedback_markup())
+    elif message.text == "Bank Transfer":
+        bot.reply_to(
+            message,
+                """Please transfer the payment to the following bank account:
+                Bank Name: CBE
+                Account Number: 1000000000000
+                Account Name: EasyGate
+                Please provide the receipt after payment.""", reply_markup = payment_markup())
+    elif message.text == "Telebirr":
+        bot.reply_to(
+            message,
+                """Please transfer the payment to the following Telebirr account:
+                Telebirr Number: 0964255107
+                Account Name: EasyGate
+                Please provide the receipt after payment.""", reply_markup = payment_markup())
+    elif message.text == "PayPal":
+        bot.reply_to(
+            message,
+                """Please transfer the payment to the following PayPal account:
+                PayPal Email: contact.easygate@gmail.com""", reply_markup = payment_markup())
+    elif message.text == "Already Paid? (Submit receipt)": 
+        bot.reply_to(
+            message,
+                """Please submit the receipt after payment.""", reply_markup = payment_markup())
+    elif message.text == "Choose Different Payment Method":
+        bot.reply_to(
+            message,
+                """Please choose a different payment method.""", reply_markup = payment_markup())
+    elif message.text == "main menu":
+        bot.reply_to(
+            message,
+                """Welcome to EasyGate!
+                We are a team of young Ethiopians, currently studying and working across the globe. Our mission is to simplify the process of accessing international education and career opportunities by reducing costs and eliminating the need for expensive intermediaries.   
+                We aim to make services that can be accessed easily from home, such as visa applications, scholarship opportunities, and career guidance, more affordable and accessible to you.
+                At EasyGate, we're dedicated to guiding you through every step of your global journey, whether it's education, work, or travel. Let us help you unlock your future, right from the comfort of your home!.
+                Stay connected with us on our social media platforms to explore our services further:
+                Telegram: [@easygate](https://t.me/easygate)
+                WhatsApp: [0964255107](https://wa.me/0964255107)
+                Email: contact.easygate@gmail.com
+                Feel free to contact us via any of the platforms above for more information or to get started!""", reply_markup = main_menu_markup())
+    else:
+        bot.reply_to(
+                message,
+                "I don't understand that command. Please use the help commant."
+            )
+    
 
-def Already_registered(message):
-    bot.reply_to(message, """
-    If you have already registered, please continue to make the payment to complete the registration process.
-    """, reply_markup=payment_buttons())
-# Registration menu
-def registration_menu(message):
-    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    markup.add(
-        KeyboardButton('Register on Google Form'),
-        KeyboardButton('Register on Telegram Bot'),
-        KeyboardButton('Register directly through Admin Contact'),
-        KeyboardButton('Main Menu')
-    )
-    bot.reply_to(message, "Choose a registration option:", reply_markup=markup)
-
-# Handle feedback options
-@bot.message_handler(func=lambda msg: msg.text in ["Feedback using Google Form", "Feedback using Telegram Bot", "Main Menu"])
-def handle_feedback_choice(message):
-    if message.text == "Feedback using Google Form":
-        markup = InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton("Submit Feedback", url="https://your-google-form-link.com"))
-        bot.reply_to(message, "Submit feedback through the form:", reply_markup=markup)
-    elif message.text == "Feedback using Telegram Bot":
-        bot.reply_to(message, "Please provide your feedback. It will be sent to the admin.")
-        bot.register_next_step_handler(message, collect_feedback)
-        bot.reply_to(message, "Thank you for your feedback! It has been sent to the admin.", reply_markup=main_menu_markup())
-    elif message.text == "Main Menu":
-        bot.reply_to(message, "Returning to main menu...", reply_markup=main_menu_markup())
-
-# Collect and send feedback to admin
-def collect_feedback(message):
-    feedback = message.text
-    bot.reply_to(message, "Thank you for your feedback! It has been sent to the admin.")
-    bot.send_message(ADMIN_CHAT_ID, f"📩 **New Feedback:**\n{feedback}")
+@bot.message_handler(func=lambda message: message.text == "Bot Registration")
+def start_registration(message):
+    chat_id = message.chat.id
+    user_data[chat_id] = {}  # Initialize user data for this chat
+    bot.send_message(chat_id, "Please provide your first name:")
+    bot.register_next_step_handler(message, collect_first_name)
 
 
 
+user_data = {}
+pending_verifications = {}
+user_states = {}
 
 
-# Handle registration options
-@bot.message_handler(func=lambda msg: msg.text in ["Register on Google Form", "Register on Telegram Bot", "Register directly through Admin Contact"])
-def handle_registration_option(message):
-    if message.text == "Register on Google Form":
-        markup = InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton("Register", url="https://your-google-form-link.com"))
-        bot.reply_to(message, "Click below to register:", reply_markup=markup)
-    elif message.text == "Register on Telegram Bot":
-        bot.reply_to(message, "Let's start registration. Please enter your first name:")
-        bot.register_next_step_handler(message, get_first_name)
-    elif message.text == "Register directly through Admin Contact":
-        bot.reply_to(message, "Contact the admin at @easygate2 for further steps.", reply_markup=start_registration())
 
-# Registration process
-def get_first_name(message):
+def collect_first_name(message):
+    chat_id = message.chat.id
     first_name = message.text.strip()
     if len(first_name) < 3:
         bot.reply_to(message, "First name must be at least 3 characters. Try again:")
-        bot.register_next_step_handler(message, get_first_name)
+        bot.register_next_step_handler(message, collect_first_name)
         return
     user_data['first_name'] = first_name
     bot.reply_to(message, "Please enter your father's name:")
-    bot.register_next_step_handler(message, get_fathers_name)
-def get_fathers_name(message):
+    bot.register_next_step_handler(message, collect_fathers_name)
+def collect_fathers_name(message):
+    chat_id = message.chat.id
     fathers_name = message.text.strip()
     if len(fathers_name) < 3:
         bot.reply_to(message, "First name must be at least 3 characters. Try again:")
-        bot.register_next_step_handler(message, get_fathers_name)
+        bot.register_next_step_handler(message, collect_fathers_name)
         return
     user_data['fathers_name'] = fathers_name
     bot.reply_to(message, "Please enter your phone number:")
-    bot.register_next_step_handler(message, get_phone_number)
-def get_phone_number(message):
+    bot.register_next_step_handler(message, collect_phone_number)
+def collect_phone_number(message):
+    chat_id = message.chat.id
     phone_number = message.text
     if len(phone_number) != 10 or not phone_number.isdigit():
         bot.send_message(message.chat.id, "Phone number must be exactly 10 digits. Please try again.")
-        bot.register_next_step_handler(message, get_phone_number)
+        bot.register_next_step_handler(message, collect_phone_number)
         return
     user_data['phone_number'] = phone_number
     bot.send_message(message.chat.id, "Please enter your email address (must contain @gmail.com):")
-    bot.register_next_step_handler(message, get_email)
-
-def get_email(message):
+    bot.register_next_step_handler(message, collect_email)
+def collect_email(message):
+    chat_id = message.chat.id
     email = message.text.strip()
     if not email.endswith('@gmail.com'):
         bot.reply_to(message, "Email must contain @gmail.com. Please try again:")
-        bot.register_next_step_handler(message, get_email)
+        bot.register_next_step_handler(message, collect_email)
         return
     user_data['email'] = email
-    bot.send_message(
-        message.chat.id,
-        "Registration complete. Now you have to make the payment of 1000 INR to complete the registration process. Please contact the admin at @easygate2 for payment details."
-    )
-    show_payment_buttons(message)
-
-    # Check for missing data before sending to admin
-    required_keys = ['first_name', 'fathers_name', 'phone_number', 'email']
-    missing_keys = [key for key in required_keys if key not in user_data]
-    if missing_keys:
-        bot.reply_to(message, f"Missing information: {', '.join(missing_keys)}")
-        return
-
-    send_data_to_admin(message)
-
-def send_data_to_admin(message):
-    admin_id = ADMIN_CHAT_ID  # Use the admin's Telegram ID from the constant
-    registration_details = (
-        f"New Registration:\n"
-        f"First Name: {user_data['first_name']}\n"
-        f"Father's Name: {user_data['fathers_name']}\n"
-        f"Phone Number: {user_data['phone_number']}\n"
-        f"Email: {user_data['email']}\n"
-    )
-    bot.send_message(admin_id, registration_details)
+    bot.send_message(chat_id, "Thank you! Now, please select a payment method or submit your receipt.", reply_markup=payment_markup())
 
 
-# Main menu markup
-def main_menu_markup():
-    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    btn1 = KeyboardButton('Feedback')
-    btn2 = KeyboardButton('About us')
-    btn3 = KeyboardButton('Our services')
-    btn4 = KeyboardButton('Continue to register')
-    btn5 = KeyboardButton('Already Registered?')
-    markup.add(btn1, btn2, btn3, btn4, btn5)
-    return markup
-
-def show_payment_buttons(message):
-    # Create buttons
-    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    make_payment_button = KeyboardButton("Make Payment")
-    cancel_registration_button = KeyboardButton("Cancel Registration")
-    markup.add(make_payment_button, cancel_registration_button)
-
-    # Send the buttons to the user
-    bot.send_message(message.chat.id, "Please choose an option:", reply_markup=markup)
-# Handle user response to the buttons
-@bot.message_handler(func=lambda message: message.text in ["Make Payment", "Cancel Registration"])
-def handle_payment_choice(message):
-    if message.text == "Make Payment":
-        bot.reply_to(message, """Thank you for choosing to make the payment. Please contact @easygate2 for further instructions.
-                     or you can pay directly through the following payment methods:""", reply_markup=payment_buttons())
-    elif message.text == "Cancel Registration":
-        bot.reply_to(message, "Your registration has been canceled. If you wish to register again, please start the process from the beginning.", reply_markup=main_menu_markup())
-def payment_buttons():
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    btn1 = types.KeyboardButton('Bank Transfer')
-    btn2 = types.KeyboardButton('Telebirr')
-    btn3 = types.KeyboardButton('Already Paid? (Submit receipt)')
-    btn4 = types.KeyboardButton('Main Menu')
-    markup.add(btn1, btn2, btn3, btn4)
-    return markup
-
-@bot.message_handler(func=lambda message: message.text in ['Bank Transfer', 'Telbirr', 'PayPal', 'Already Paid? (Submit receipt)', 'Choose Different Payment Method'])
-def handle_payment_methods(message):
-    if message.text == 'Bank Transfer':
-        bot.reply_to(message, """Please make the payment to the following account:
-Bank Name: XYZ Bank
-Account Number: 1234567890
-SWIFT/BIC: ABCDEF123
-
-Once you have made the payment, please send us the receipt (PDF or image) on this username @easygate2 or you can send it directly through the bot by clicking the Already Paid button.""")
-        bot.reply_to(message, "Do you want to choose a different payment method or confirm payment? Select an option.", reply_markup=payment_buttons())
-
-    elif message.text == 'Telebirr':
-        bot.reply_to(message, """Please use the following Telebirr number to make the payment:
-Telebirr Number: 0912345678
-                     
-Once you have made the payment, please send us the receipt (PDF or image)  on this username @easygate2 or you can send it directly through the bot by clicking the Already Paid button.""")
-        bot.reply_to(message, "Do you want to choose a different payment method or confirm payment? Select an option.", reply_markup=payment_buttons())
-
-
-    elif message.text == 'Already Paid? (Submit receipt)':
-        bot.reply_to(message, """Please send your payment receipt (PDF or image) to confirm your payment.""")
-        # Save the user receipt or process further to verify the payment with the admin
-        bot.register_next_step_handler(message, process_receipt)
-
-    elif message.text == 'Choose Different Payment Method':
-        bot.reply_to(message, """Payment options:
-""", reply_markup=payment_buttons())
-@bot.message_handler(func=lambda message: message.text == "Telebirr")
-def handle_telebirr(message):
-    bot.reply_to(message, """Please use the following Telebirr number to make the payment:
-Telebirr Number: 0912345678
-                     
-Once you have made the payment, please send us the receipt (PDF or image) on this username @easygate2 or you can send it directly through the bot by clicking the 'Already Paid' button.""")
-    bot.reply_to(message, "Do you want to choose a different payment method or confirm payment? Select an option.", reply_markup=payment_buttons())
 
 # Handle the receipt submission and forward to admin
 @bot.message_handler(content_types=['document', 'photo'])
 def process_receipt(message):
     user_id = message.chat.id
     user_first_name = message.chat.first_name
+
+
+
+    
 
     if message.document:
         file_name = message.document.file_name
@@ -369,6 +347,7 @@ def process_receipt(message):
     pending_verifications[user_id] = {'file_id': receipt_file, 'file_type': file_type, 'user_name': user_first_name}
     bot.reply_to(message, "Your payment receipt has been sent for verification. The admin will confirm your payment shortly.")
     bot.send_message(ADMIN_CHAT_ID, f"📩 New Payment Receipt from {user_first_name} ({user_id}):")
+    # bot.send_message(ADMIN_CHAT_ID, registration_details)
 
     # Send Inline buttons to Admin for verification
     markup = types.InlineKeyboardMarkup()
@@ -382,11 +361,11 @@ def process_receipt(message):
 @bot.callback_query_handler(func=lambda call: call.data.startswith('verify_') or call.data.startswith('invalid_'))
 def handle_admin_response(call):
     user_id = int(call.data.split('_')[1])
-
+    
     if call.data.startswith('verify_'):
         if user_id in pending_verifications:
             user_data[user_id] = pending_verifications.pop(user_id)
-            bot.send_message(user_id, "✅ Your payment has been verified! you will hear from us once we have processed your registration and started giving services.")
+            bot.send_message(user_id, "✅ Your payment has been verified! Please proceed to select your service. this is our channel, please join us [channel](https://t.me/easygate)", reply_markup=main_menu_markup())
         else:
             bot.send_message(ADMIN_CHAT_ID, "The user ID is not in the pending verifications.")
 
@@ -399,23 +378,83 @@ def handle_admin_response(call):
             bot.send_message(ADMIN_CHAT_ID, "The user ID is not in the pending verifications.")
 
     bot.answer_callback_query(call.id)  # Close the callback button
-    def handle_service_selection(message):
-        user_id = message.chat.id
-        service_selected = message.text
-    
-        # Debug log
-        print(f"User {user_id} selected the service: {service_selected}")
-    
-        if user_id in user_data:
-            receipt_details = user_data[user_id]
-            file_id = receipt_details['file_id']
-            file_type = receipt_details['file_type']
-    
-            # Forward the receipt and service selection to the admin
-            bot.send_message(ADMIN_CHAT_ID, f"📩 Verified Payment Receipt from {receipt_details['user_name']} ({user_id}):\n\nService: {service_selected}")
-            if file_type == 'Document':
-                bot.send_document(ADMIN_CHAT_ID, file_id)
-            elif file_type == 'Photo':
-                bot.send_photo(ADMIN_CHAT_ID, file_id)
-print("Bot is running...")
+
+
+def handle_service_selection(message):
+    user_id = message.chat.id
+    service_selected = message.text
+
+    # Debug log
+    print(f"User {user_id} selected the service: {service_selected}")
+
+    if user_id in user_data:
+        receipt_details = user_data[user_id]
+        file_id = receipt_details['file_id']
+        file_type = receipt_details['file_type']
+
+        # Forward the receipt and service selection to the admin
+        bot.send_message(ADMIN_CHAT_ID, f"📩 Verified Payment Receipt from {receipt_details['user_name']} ({user_id}):\n\nService: {service_selected}")
+        if file_type == 'Document':
+            bot.send_document(ADMIN_CHAT_ID, file_id)
+        elif file_type == 'Photo':
+            bot.send_photo(ADMIN_CHAT_ID, file_id)
+
+        # Inform the user about the service selection
+
+        # Clear the user's data after the service has been provided
+        del user_data[user_id]
+    else:
+        bot.reply_to(message, "We could not find your payment details. Please resend your receipt.")
+
+
+def process_receipt(message):
+    # Process receipt logic here
+    chat_id = message.chat.id
+    bot.send_message(
+        chat_id,
+        "Thank you for submitting your receipt. Please choose a payment method or let us know if you've already paid:",
+        reply_markup=payment_markup()  # Show the payment options
+    )
+
+def main_menu_markup():
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    btn1 = types.KeyboardButton('About Us')
+    btn2 = types.KeyboardButton('Our Services')
+    btn3 = types.KeyboardButton('Continue to  Register')
+    btn4 = types.KeyboardButton('Feedback')
+    btn5 = types.KeyboardButton('Already Registered?')
+    markup.add(btn1, btn2, btn3, btn4, btn5)
+    return markup
+def register_markup():
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    btn1 = types.KeyboardButton('Google Form')
+    btn2 = types.KeyboardButton('Bot Registration')
+    btn3 = types.KeyboardButton('Directly on Telegram')
+    btn4 = types.KeyboardButton('main menu')
+    markup.add(btn1, btn2, btn3, btn4)
+    return markup
+def feedback_markup():
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    btn1 = types.KeyboardButton('Google Form feedback')
+    btn2 = types.KeyboardButton('Directly to Admin')
+    btn3 = types.KeyboardButton('main menu')
+    markup.add(btn1, btn2, btn3)
+    return markup
+def payment_markup():
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    btn1 = types.KeyboardButton('Bank Transfer')
+    btn2 = types.KeyboardButton('Telebirr')
+    btn3 = types.KeyboardButton('PayPal')
+    btn4 = types.KeyboardButton('Already Paid? (Submit receipt)')
+    btn5 = types.KeyboardButton('Choose Different Payment Method')
+    btn6 = types.KeyboardButton('main menu')
+    btn7 = types.KeyboardButton('Feedback')
+    btn8 = types.KeyboardButton('back')
+    markup.add(btn1, btn2, btn3, btn4, btn5,btn6, btn7, btn8)
+    return markup
+
+
+
+
+    print("Bot is running...")
 bot.polling()
