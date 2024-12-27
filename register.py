@@ -26,7 +26,9 @@
 import email
 from flask import Flask, request
 import telebot
-from telegram import Bot, Update
+from telegram import Bot
+from telegram import Update
+from telebot import types
 from telebot import types
 from telegram.ext import CommandHandler, Updater, CallbackContext, Application
 import os
