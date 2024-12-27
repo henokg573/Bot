@@ -40,7 +40,7 @@ def webhook():
     return "!", 200
 if __name__ == "__main__":
     app.run(host=WEBAPP_HOST, port=5000)
-@app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
+@app.route('/webhook/7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII', methods=['POST'])
 def telegram_webhook():
     from flask import request
     import telebot
@@ -53,6 +53,7 @@ def telegram_webhook():
         bot.process_new_updates([update])
 
     return "OK", 200
+
 
 
 
