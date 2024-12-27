@@ -19,7 +19,7 @@ bot = telebot.TeleBot(API_KEY)
 
 
 app = Flask(__name__)
-
+TELEGRAM_API_URL = f"https://api.telegram.org/bot{API_KEY}/setWebhook"
 WEBHOOK_HOST = 'https://registration-bot.onrender.com'
 WEBHOOK_PATH = f'webhook/{API_KEY}'
 DB_URL = 'postgresql://easygate_db_user:EezQHIycha07Xfq6DVHS7QLbt7D0BiLo@dpg-ctn8ont2ng1s73bi6ir0-a.oregon-postgres.render.com/easygate_db'
