@@ -18,8 +18,28 @@
 
 
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
+WEBHOOK_HOST = 'https://registration-bot.onrender.com'
+WEBHOOK_PATH = f'webhook/{API_KEY}'
+DB_URL = 'postgresql://easygate_db_user:EezQHIycha07Xfq6DVHS7QLbt7D0BiLo@dpg-ctn8ont2ng1s73bi6ir0-a.oregon-postgres.render.com/easygate_db'
+WEBHOOK URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+WEBAPP_HOST = '0.0.0.0'
+
+
+# Set Webhook
+bot.remove_webhook()
+bot.set_webhook(url=WEBHOOK_URL)
+
+
+@app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
+def webhook():
+    json_string = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return "!", 200
+if __name__ == "__main__":
+    app.run(host=WEBAPP_HOST, port=5000)
 
 
 
