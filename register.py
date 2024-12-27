@@ -23,7 +23,7 @@ app = Flask(__name__)
 WEBHOOK_HOST = 'https://registration-bot.onrender.com'
 WEBHOOK_PATH = f'webhook/{API_KEY}'
 DB_URL = 'postgresql://easygate_db_user:EezQHIycha07Xfq6DVHS7QLbt7D0BiLo@dpg-ctn8ont2ng1s73bi6ir0-a.oregon-postgres.render.com/easygate_db'
-WEBHOOK URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+WEBHOOK_URL = f'{WEBHOOK_HOST}/{WEBHOOK_PATH}'
 WEBAPP_HOST = '0.0.0.0'
 
 
