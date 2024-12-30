@@ -15,7 +15,9 @@ ADMIN_CHAT_ID = "793034140"
 # ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id"")
 bot = telebot.TeleBot(API_KEY)
 
-
+# # Delete any active webhook
+# bot.remove_webhook()
+# print("Webhook removed. Starting polling...")
 
 
 # app = Flask(__name__)
@@ -106,7 +108,7 @@ app = Flask(__name__)
 # Remove duplicate echo_all handler
 
 # Set the webhook (replace with your own webhook URL)
-bot.remove_webhook()
+# bot.remove_webhook()
 # bot.set_webhook(url='https://2943-185-182-193-115.ngrok-free.app')
 
 # if __name__ == "__main__":
@@ -138,7 +140,7 @@ from telebot import types
 
 
 # Replace with your API key
-API_KEY = '7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII'
+# API_KEY = '7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII'
 bot = telebot.TeleBot(API_KEY)
 
 # Admin's chat ID (replace with the actual admin chat ID)
@@ -350,7 +352,29 @@ def handle_options(message):
                 message,
                 "I don't understand that command. Please use the help commant."
             )
+# Handle the feedback submission and forward to admin
+@bot.message_handler(func=lambda message: message.text == "Directly to Admin")
+def handle_direct_to_admin(message):
+    bot.reply_to(
+        message,
+        "Please send your feedback now. I'll forward it to the admin."
+    )
     
+    # Register a handler to capture the next message as feedback
+    bot.register_next_step_handler(message, forward_feedback_to_admin)
+
+def forward_feedback_to_admin(message):
+    # Send the user's feedback to the admin
+    try:
+        bot.send_message(
+            ADMIN_CHAT_ID,
+            f"Feedback from @{message.from_user.username or message.from_user.first_name}:\n{message.text}"
+        )
+        bot.reply_to(message, "Thank you! Your feedback has been sent to the admin.")
+    except Exception as e:
+        bot.reply_to(message, "Oops! Something went wrong while sending your feedback.")
+        print(f"Error: {e}")
+
 
 @bot.message_handler(func=lambda message: message.text == "Bot Registration")
 def start_registration(message):
@@ -555,5 +579,5 @@ def payment_markup():
 
 # Start the bot
 if __name__ == "__main__":
-    bot.polling()
+    bot.infinity_polling()
     print("Bot is running...")
