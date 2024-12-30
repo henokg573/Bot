@@ -80,10 +80,9 @@ def webhook():
     bot.process_new_updates([update])
     return "OK", 200
 
-
 if __name__ == "__main__":
-    from gunicorn.app.wsgiapp import run
-    run()
+    app.run(host=WEBAPP_HOST, port=5000, debug=True)  # For local testing
+
 
 
 
