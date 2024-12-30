@@ -10,7 +10,7 @@ import telegram
 from telebot import types
 
 API_KEY = "7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII"
-# ADMIN_CHAT_ID = "793034140"
+ADMIN_CHAT_ID = "793034140"
 # API_KEY = os.getenv("API_KEY")
 # ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id"")
 bot = telebot.TeleBot(API_KEY)
@@ -54,45 +54,67 @@ bot = telebot.TeleBot(API_KEY)
 
 #     return "OK", 200
 
+# app = Flask(__name__)
+
+# # Use environment variables for sensitive data
+# # API_KEY = os.getenv("API_KEY")
+# # DB_URL = os.getenv("DB_URL")
+
+# WEBHOOK_HOST = 'https://registration-bot.onrender.com'
+# WEBHOOK_PATH = f'webhook/{API_KEY}'
+# WEBHOOK_URL = f'{WEBHOOK_HOST}/{WEBHOOK_PATH}'
+# WEBAPP_HOST = '0.0.0.0'
+
+# bot.delete_webhook()
+# bot.set_webhook(url=WEBHOOK_URL)
+
+
+# # Initialize the bot
+# bot = telebot.TeleBot(API_KEY)
+
+# # Set Webhook only if it's not already set
+# if not bot.get_webhook_info().url:
+#     bot.set_webhook(url=WEBHOOK_URL)
+
+
+# @app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
+# def webhook():
+#     try:
+#         json_string = request.get_data().decode('utf-8')
+#         update = telebot.types.Update.de_json(json_string)
+#         bot.process_new_updates([update])
+#         return "OK", 200
+#     except Exception as e:
+#         print(f"Error processing webhook: {e}")
+#         return "Internal Server Error", 500
+
+
+# if __name__ == "__main__":
+#     app.run(host=WEBAPP_HOST, port=5000, debug=True)  # For local testing
+
 app = Flask(__name__)
 
-# Use environment variables for sensitive data
-API_KEY = os.getenv("API_KEY")
-DB_URL = os.getenv("DB_URL")
+# Define a route for the webhook
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     json_str = request.get_data().decode('UTF-8')
+#     update = telebot.types.Update.de_json(json_str)
+#     bot.process_new_updates([update])
+#     return "OK"
 
-WEBHOOK_HOST = 'https://registration-bot.onrender.com'
-WEBHOOK_PATH = f'webhook/{API_KEY}'
-WEBHOOK_URL = f'{WEBHOOK_HOST}/{WEBHOOK_PATH}'
-WEBAPP_HOST = '0.0.0.0'
+# Set up a basic handler for bot messages
+# Remove duplicate echo_all handler
 
-bot.delete_webhook()
-bot.set_webhook(url=WEBHOOK_URL)
+# Set the webhook (replace with your own webhook URL)
+bot.remove_webhook()
+# bot.set_webhook(url='https://2943-185-182-193-115.ngrok-free.app')
 
-
-# Initialize the bot
-bot = telebot.TeleBot(API_KEY)
-
-# Set Webhook only if it's not already set
-if not bot.get_webhook_info().url:
-    bot.set_webhook(url=WEBHOOK_URL)
-
-
-@app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
-def webhook():
-    try:
-        json_string = request.get_data().decode('utf-8')
-        update = telebot.types.Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return "OK", 200
-    except Exception as e:
-        print(f"Error processing webhook: {e}")
-        return "Internal Server Error", 500
-
-
-if __name__ == "__main__":
-    app.run(host=WEBAPP_HOST, port=5000, debug=True)  # For local testing
-
-
+# if __name__ == "__main__":
+#     app.run(debug=True)
+# @bot.message_handler(func=lambda message: True)
+# def echo_all(message):
+#     print(f"Received message: {message.text}")
+#     bot.reply_to(message, message.text)
 
 
 
@@ -531,6 +553,7 @@ def payment_markup():
 
 
 
-print(bot.get_webhook_info())
-    # print("Bot is running...")
-# bot.polling()
+# Start the bot
+if __name__ == "__main__":
+    bot.polling()
+    print("Bot is running...")
