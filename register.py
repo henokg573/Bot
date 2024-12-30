@@ -18,18 +18,59 @@ bot = telebot.TeleBot(API_KEY)
 
 
 
+# app = Flask(__name__)
+# TELEGRAM_API_URL = f"https://api.telegram.org/bot{API_KEY}/setWebhook"
+# WEBHOOK_HOST = 'https://registration-bot.onrender.com'
+# WEBHOOK_PATH = f'webhook/{API_KEY}'
+# DB_URL = 'postgresql://easygate_db_user:EezQHIycha07Xfq6DVHS7QLbt7D0BiLo@dpg-ctn8ont2ng1s73bi6ir0-a.oregon-postgres.render.com/easygate_db'
+# WEBHOOK_URL = f'{WEBHOOK_HOST}/{WEBHOOK_PATH}'
+# WEBAPP_HOST = '0.0.0.0'
+
+
+# # Set Webhook
+# bot.remove_webhook()
+# bot.set_webhook(url=WEBHOOK_URL)
+
+
+# @app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
+# def webhook():
+#     json_string = request.get_data().decode('utf-8')
+#     update = telebot.types.Update.de_json(json_string)
+#     bot.process_new_updates([update])
+#     return "!", 200
+# if __name__ == "__main__":
+#     app.run(host=WEBAPP_HOST, port=5000)
+# @app.route('/webhook/7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII', methods=['POST'])
+# def telegram_webhook():
+#     from flask import request
+#     import telebot
+
+#     json_data = request.get_json()
+#     bot = telebot.TeleBot(API_KEY)
+
+#     if json_data:
+#         update = telebot.types.Update.de_json(json_data)
+#         bot.process_new_updates([update])
+
+#     return "OK", 200
+
 app = Flask(__name__)
-TELEGRAM_API_URL = f"https://api.telegram.org/bot{API_KEY}/setWebhook"
+
+# Use environment variables for sensitive data
+API_KEY = os.getenv("API_KEY")
+DB_URL = os.getenv("DB_URL")
+
 WEBHOOK_HOST = 'https://registration-bot.onrender.com'
 WEBHOOK_PATH = f'webhook/{API_KEY}'
-DB_URL = 'postgresql://easygate_db_user:EezQHIycha07Xfq6DVHS7QLbt7D0BiLo@dpg-ctn8ont2ng1s73bi6ir0-a.oregon-postgres.render.com/easygate_db'
 WEBHOOK_URL = f'{WEBHOOK_HOST}/{WEBHOOK_PATH}'
 WEBAPP_HOST = '0.0.0.0'
 
+# Initialize the bot
+bot = telebot.TeleBot(API_KEY)
 
-# Set Webhook
-bot.remove_webhook()
-bot.set_webhook(url=WEBHOOK_URL)
+# Set Webhook only if it's not already set
+if not bot.get_webhook_info().url:
+    bot.set_webhook(url=WEBHOOK_URL)
 
 
 @app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
@@ -37,22 +78,12 @@ def webhook():
     json_string = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_string)
     bot.process_new_updates([update])
-    return "!", 200
-if __name__ == "__main__":
-    app.run(host=WEBAPP_HOST, port=5000)
-@app.route('/webhook/7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII', methods=['POST'])
-def telegram_webhook():
-    from flask import request
-    import telebot
-
-    json_data = request.get_json()
-    bot = telebot.TeleBot(API_KEY)
-
-    if json_data:
-        update = telebot.types.Update.de_json(json_data)
-        bot.process_new_updates([update])
-
     return "OK", 200
+
+
+if __name__ == "__main__":
+    from gunicorn.app.wsgiapp import run
+    run()
 
 
 
