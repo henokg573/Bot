@@ -65,6 +65,10 @@ WEBHOOK_PATH = f'webhook/{API_KEY}'
 WEBHOOK_URL = f'{WEBHOOK_HOST}/{WEBHOOK_PATH}'
 WEBAPP_HOST = '0.0.0.0'
 
+bot.delete_webhook()
+bot.set_webhook(url=WEBHOOK_URL)
+
+
 # Initialize the bot
 bot = telebot.TeleBot(API_KEY)
 
@@ -75,13 +79,19 @@ if not bot.get_webhook_info().url:
 
 @app.route(f'/{WEBHOOK_PATH}', methods=['POST'])
 def webhook():
-    json_string = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_string)
-    bot.process_new_updates([update])
-    return "OK", 200
+    try:
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return "OK", 200
+    except Exception as e:
+        print(f"Error processing webhook: {e}")
+        return "Internal Server Error", 500
+
 
 if __name__ == "__main__":
     app.run(host=WEBAPP_HOST, port=5000, debug=True)  # For local testing
+
 
 
 
@@ -521,6 +531,6 @@ def payment_markup():
 
 
 
-
-    print("Bot is running...")
-bot.polling()
+print(bot.get_webhook_info())
+    # print("Bot is running...")
+# bot.polling()
