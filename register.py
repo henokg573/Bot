@@ -9,7 +9,7 @@ from telebot.types import ForceReply
 import telegram
 from telebot import types
 
-API_KEY = "7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII"
+API_KEY = "7759515826:AAHeAFd4qCCvxl89rKZjBc5A14HnWEGrW8o"
 ADMIN_CHAT_ID = "793034140"
 # API_KEY = os.getenv("API_KEY")
 # ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id"")
