@@ -16,7 +16,7 @@ ADMIN_CHAT_ID = "793034140"
 bot = telebot.TeleBot(API_KEY)
 
 # # Delete any active webhook
-# bot.remove_webhook()
+bot.remove_webhook()
 # print("Webhook removed. Starting polling...")
 
 
