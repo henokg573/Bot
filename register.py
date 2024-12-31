@@ -145,7 +145,7 @@ from telebot import types
 
 
 # Replace with your API key
-# API_KEY = '7759515826:AAFKPIz6SVVBT8Owvk9cVW4yema2alXjtII'
+# API_KEY = '7759515826:AAHeAFd4qCCvxl89rKZjBc5A14HnWEGrW8o'
 bot = telebot.TeleBot(API_KEY)
 
 # Admin's chat ID (replace with the actual admin chat ID)
