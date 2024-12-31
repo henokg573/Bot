@@ -2,7 +2,7 @@ FROM  debian:latest
 
 RUN apt update && apt upgrade -y
 RUN apt install -y python3 python3-pip ffmpeg -y
-RUN cd/
+RUN apt install -y git
 RUN git clone https://github.com/henokg573/Bot.git
 RUN cd Bot
 WORKDIR /Bot
