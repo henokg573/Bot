@@ -95,6 +95,7 @@ bot.remove_webhook()
 #     app.run(host=WEBAPP_HOST, port=5000, debug=True)  # For local testing
 
 app = Flask(__name__)
+    
 
 # Define a route for the webhook
 # @app.route('/webhook', methods=['POST'])
@@ -118,7 +119,11 @@ app = Flask(__name__)
 #     print(f"Received message: {message.text}")
 #     bot.reply_to(message, message.text)
 
-
+if __name__ == "__main__":
+    try:
+        bot.infinity_polling()
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 import email
